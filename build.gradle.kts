@@ -15,10 +15,13 @@ repositories {
 	mavenCentral()
 	maven { url = uri("https://repo.spring.io/snapshot") }
 	maven { url = uri("https://repo.spring.io/milestone") }
+	maven { url = uri("https://dl.bintray.com/konrad-kaminski/maven") }
 }
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-webflux")
+	implementation("org.springframework.boot:spring-boot-starter-data-mongodb-reactive")
+	implementation("org.springframework.kotlin:spring-data-mongodb-kotlin-coroutine:0.3.7")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
