@@ -1,13 +1,11 @@
 package com.zwolsman.himpapi.controllers
 
 import com.zwolsman.himpapi.domain.PlantMetric
-import com.zwolsman.himpapi.repositories.PlantMetricRepository
 import com.zwolsman.himpapi.services.PlantMetricService
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.emptyFlow
 import org.apache.commons.logging.LogFactory
-import org.springframework.data.mongodb.core.ReactiveMongoTemplate
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
@@ -16,19 +14,18 @@ import org.springframework.web.bind.annotation.*
 @ExperimentalCoroutinesApi
 @RestController
 @RequestMapping("/api/metric")
-class MetricController(val service: PlantMetricService, private val repo: PlantMetricRepository, private val template: ReactiveMongoTemplate) {
+class MetricController(val service: PlantMetricService) {
 
     private val log = LogFactory.getLog(javaClass)
 
     @GetMapping(produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
-    suspend fun stream() = service.tail.map { PlantMetric(it) }
+    suspend fun stream() = emptyFlow<PlantMetric>()
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     suspend fun add(@RequestBody metric: PlantMetric) {
-        log.info("Received $metric")
-        val doc = service.save(metric)
-        log.info("Created new metric (${doc.id})")
+        val point = service.save(metric)
+        log.info("Created new metric ($point)")
     }
 
 }
